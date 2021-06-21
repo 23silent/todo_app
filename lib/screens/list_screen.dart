@@ -16,16 +16,31 @@ class _ListScreen extends State<ListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo list'),
-        centerTitle: true,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(200),
+        child: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+          title: Text(
+            'Todo list',
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          flexibleSpace: SizedBox(
+            child: Opacity(
+                opacity: .4,
+                child:
+                    Image.asset('assets/images/cover.png', fit: BoxFit.cover)),
+          ),
+        ),
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         TextButton(
             onPressed: () {
               showDatePicker(
                 context: context,
-                initialDate: dt,
+                initialDate: dt.subtract(Duration(days: 100)),
                 firstDate: DateTime.now(),
                 lastDate: DateTime.now().add(Duration(days: 100)),
               ).then((date) {

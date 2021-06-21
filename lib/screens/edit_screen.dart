@@ -51,90 +51,98 @@ class _EditScreenState extends State<EditScreen> {
         title: Text('Todo edit'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'Enter title'),
-              controller: _titleController,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'Enter text'),
-              controller: _textController,
-              maxLines: 10,
-              minLines: 5,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-                height: 50,
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.black38),
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
+      body: ListView(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(), hintText: 'Enter title'),
+                    controller: _titleController,
                   ),
-                  child: TextButton(
-                    onPressed: () {
-                      showDatePicker(
-                        context: context,
-                        initialDate: dt,
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(Duration(days: 100)),
-                      ).then((date) {
-                        if (date != null) {
-                          showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.now(),
-                          ).then((time) {
-                            if (time != null) {
-                              setState(() {
-                                dt = DateTime(
-                                  date.year,
-                                  date.month,
-                                  date.day,
-                                  time.hour,
-                                  time.minute,
-                                );
-                              });
-                            }
-                          });
-                        }
-                      });
-                    },
-                    child: Text('${formatDt(dt, null)}'),
+                  SizedBox(
+                    height: 20,
                   ),
-                )),
-            SizedBox(
-              height: 20,
+                  TextField(
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(), hintText: 'Enter text'),
+                    controller: _textController,
+                    maxLines: 10,
+                    minLines: 5,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                      height: 50,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.black38),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            showDatePicker(
+                              context: context,
+                              initialDate: dt,
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime.now().add(Duration(days: 100)),
+                            ).then((date) {
+                              if (date != null) {
+                                showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now(),
+                                ).then((time) {
+                                  if (time != null) {
+                                    setState(() {
+                                      dt = DateTime(
+                                        date.year,
+                                        date.month,
+                                        date.day,
+                                        time.hour,
+                                        time.minute,
+                                      );
+                                    });
+                                  }
+                                });
+                              }
+                            });
+                          },
+                          child: Text('${formatDt(dt, null)}'),
+                        ),
+                      )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Show notification'),
+                      Switch(
+                          value: isNotificationScheduled,
+                          onChanged: (value) {
+                            setState(() {
+                              isNotificationScheduled = value;
+                            });
+                          })
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _onSubmitPressed(context),
+                    child: Text('Submit'),
+                  ),
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Show notification'),
-                Switch(value: isNotificationScheduled, onChanged: (value) {
-                  setState(() {
-                    isNotificationScheduled = value;
-                  });
-                })
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              onPressed: () => _onSubmitPressed(context),
-              child: Text('Submit'),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -144,9 +152,8 @@ class _EditScreenState extends State<EditScreen> {
       context.read<TodoItemModel>().edit(todoItem!.id, _titleController.text,
           _textController.text, dt, todoItem!.isDone, isNotificationScheduled);
     } else {
-      context
-          .read<TodoItemModel>()
-          .add(_titleController.text, _textController.text, dt, isNotificationScheduled);
+      context.read<TodoItemModel>().add(_titleController.text,
+          _textController.text, dt, isNotificationScheduled);
     }
     Navigator.pop(context);
   }

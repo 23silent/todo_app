@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/utils/date.dart';
+import 'package:todo_app/classes/todo_item.dart';
+import 'package:todo_app/components/tag_list.dart';
 
 import '/components/todo_items_list_component.dart';
 import '/models/todo_item.dart';
@@ -15,46 +16,48 @@ class _ListScreen extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<TodoItem> todoItems =
+        context.watch<TodoItemModel>().getTodoItemsByDate(dt);
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(200),
-        child: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          title: Text(
-            'Todo list',
-            style: TextStyle(color: Colors.black),
-          ),
-          centerTitle: true,
-          flexibleSpace: SizedBox(
-            child: Opacity(
-                opacity: .4,
-                child:
-                    Image.asset('assets/images/cover.png', fit: BoxFit.cover)),
-          ),
-        ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Padding(
+            padding: EdgeInsets.only(left: 44, top: 16),
+            child: Text(
+              'Todo list',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold),
+            )),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDatePicker(
+                  context: context,
+                  initialDate: dt,
+                  firstDate: dt.subtract(Duration(days: 100)),
+                  lastDate: dt.add(Duration(days: 100)),
+                ).then((date) {
+                  setState(() {
+                    if (date != null) {
+                      dt = date;
+                    }
+                  });
+                });
+              },
+              icon: Icon(
+                Icons.menu_rounded,
+                color: Colors.black,
+              ))
+        ],
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        TextButton(
-            onPressed: () {
-              showDatePicker(
-                context: context,
-                initialDate: dt.subtract(Duration(days: 100)),
-                firstDate: DateTime.now(),
-                lastDate: DateTime.now().add(Duration(days: 100)),
-              ).then((date) {
-                setState(() {
-                  if (date != null) {
-                    dt = date;
-                  }
-                });
-              });
-            },
-            child: Text('Todos for ${formatDt(dt, 'dd MMM')}')),
         Expanded(
           child: TodoItemsListComponent(
-            todoItems: context.watch<TodoItemModel>().getTodoItemsByDate(dt),
+            todoItems: todoItems,
             onRemovePressed: (int id) =>
                 context.read<TodoItemModel>().remove(id),
             onEditPressed: (int id) =>
@@ -85,14 +88,30 @@ class _ListScreen extends State<ListScreen> {
                 context.read<TodoItemModel>().setIsDone(id, value);
               });
             },
+            footer: Padding(
+              padding: EdgeInsets.only(left: 60, right: 16, top: 32),
+              child: TagList(
+                todoItems: todoItems,
+                title: Padding(
+                  padding: EdgeInsets.only(bottom: 15),
+                  child: Text(
+                    'List',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black26),
+                  ),
+                ),
+                onTagPressed: (TodoItemTag tag) {},
+              ),
+            ),
           ),
         ),
       ]),
       floatingActionButton: FloatingActionButton(
-        key: const Key('increment_floatingActionButton'),
         onPressed: () => Navigator.pushNamed(context, '/edit'),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.white,
+        child: const Icon(Icons.add, color: Colors.blueAccent, size: 32),
       ),
     );
   }

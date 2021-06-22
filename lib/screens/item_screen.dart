@@ -19,10 +19,6 @@ class ItemScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              item.title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
             Text(item.text),
             Text(formatDt(item.dt, null)),
           ],

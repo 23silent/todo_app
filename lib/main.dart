@@ -37,8 +37,9 @@ class MyApp extends StatelessWidget {
                 title: 'Flutter Demo',
                 initialRoute: '/',
                 routes: {
-                  '/': (context) => HomeScreen(),
-                  '/list': (context) => ListScreen(),
+                  '/': (context) => ListScreen(),
+                  // '/': (context) => HomeScreen(),
+                  // '/list': (context) => ListScreen(),
                   '/item': (context) => ItemScreen(),
                   '/edit': (context) => EditScreen(),
                 },

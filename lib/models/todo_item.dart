@@ -28,13 +28,13 @@ class TodoItemModel with ChangeNotifier {
   }
 
   void add(
-      String title, String text, DateTime dt, bool isNotificationScheduled) {
+      String title, String text, DateTime dt, TodoItemTag? tag, bool isNotificationScheduled) {
     int id = _todoItems.length == 0 ? 0 : _todoItems.last.id + 1;
     TodoItem newItem = TodoItem(
         id: id,
-        title: title,
         createdDt: DateTime.now(),
         dt: dt,
+        tag: tag,
         isDone: false,
         isNotificationScheduled: isNotificationScheduled,
         text: text);
@@ -55,10 +55,10 @@ class TodoItemModel with ChangeNotifier {
         .map((e) => e.id == id
             ? TodoItem(
                 id: id,
-                title: e.title,
                 text: e.text,
                 createdDt: e.createdDt,
                 dt: e.dt,
+                tag: e.tag,
                 isDone: e.isDone,
                 isNotificationScheduled: e.isNotificationScheduled,
                 removed: true)
@@ -69,15 +69,15 @@ class TodoItemModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void edit(int id, String title, String text, DateTime dt, bool isDone,
+  void edit(int id, String title, String text, DateTime dt, TodoItemTag? tag, bool isDone,
       bool isNotificationScheduled) {
     TodoItem toUpdate = _todoItems.firstWhere((element) => element.id == id);
     TodoItem updated = TodoItem(
         id: id,
-        title: title,
         text: text,
         createdDt: toUpdate.createdDt,
         dt: dt,
+        tag: tag,
         isDone: isDone,
         removed: toUpdate.removed,
         isNotificationScheduled: isNotificationScheduled);
@@ -96,10 +96,10 @@ class TodoItemModel with ChangeNotifier {
         .map((e) => e.id == id
             ? TodoItem(
                 id: e.id,
-                title: e.title,
                 text: e.text,
                 createdDt: e.createdDt,
                 dt: e.dt,
+                tag: e.tag,
                 isDone: isDone != null ? isDone : !e.isDone,
                 isNotificationScheduled: e.isNotificationScheduled,
                 removed: e.removed)
@@ -115,7 +115,7 @@ class TodoItemModel with ChangeNotifier {
   }
 
   void _scheduleNotification(TodoItem item) {
-    notificationService.zonedScheduleNotification(item.id, item.title,
+    notificationService.zonedScheduleNotification(item.id, 'Scheduled notif',
         item.text, item.id.toString(), item.dt.subtract(Duration(minutes: 15)));
   }
 

@@ -18,17 +18,19 @@ class TodoItemModel with ChangeNotifier {
   TodoItem getItem(int id) => _todoItems.firstWhere((item) => item.id == id);
 
   List<TodoItem> getTodoItemsByDate(DateTime dt) {
-    var items =
-        _todoItems.where((item) => dt.difference(item.dt).inDays == 0).toList();
-    return items;
+    return _todoItems
+        .where((item) => DateTime(dt.year, dt.month, dt.day)
+            .difference(DateTime(item.dt.year, item.dt.month, item.dt.day))
+            .inDays == 0)
+        .toList();
   }
 
   void init() {
     this._todoItems = this.storageService.getTodoItems();
   }
 
-  void add(
-      String title, String text, DateTime dt, TodoItemTag? tag, bool isNotificationScheduled) {
+  void add(String title, String text, DateTime dt, TodoItemTag? tag,
+      bool isNotificationScheduled) {
     int id = _todoItems.length == 0 ? 0 : _todoItems.last.id + 1;
     TodoItem newItem = TodoItem(
         id: id,
@@ -69,8 +71,8 @@ class TodoItemModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void edit(int id, String title, String text, DateTime dt, TodoItemTag? tag, bool isDone,
-      bool isNotificationScheduled) {
+  void edit(int id, String title, String text, DateTime dt, TodoItemTag? tag,
+      bool isDone, bool isNotificationScheduled) {
     TodoItem toUpdate = _todoItems.firstWhere((element) => element.id == id);
     TodoItem updated = TodoItem(
         id: id,

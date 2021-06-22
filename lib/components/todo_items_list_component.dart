@@ -13,6 +13,7 @@ class TodoItemsListComponent extends StatelessWidget {
   final Function(int id) onDonePressed;
   final Function(int id) onShowItemPressed;
   final Widget? footer;
+  final ScrollController? controller;
 
   TodoItemsListComponent({
     required this.todoItems,
@@ -21,6 +22,7 @@ class TodoItemsListComponent extends StatelessWidget {
     required this.onDonePressed,
     required this.onShowItemPressed,
     this.footer,
+    this.controller,
   });
 
   @override
@@ -28,6 +30,7 @@ class TodoItemsListComponent extends StatelessWidget {
     List<TodoItem> todoItems =
         this.todoItems.where((e) => e.removed != true).toList();
     return ListView(
+      controller: controller,
       children: [
         ...todoItems.map((item) {
           return Container(
@@ -51,7 +54,7 @@ class TodoItemsListComponent extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border(
                                 bottom:
-                                    BorderSide(width: 1, color: Colors.black26),
+                                    BorderSide(width: 1, color: CustomColor.black10),
                               ),
                             ),
                             child: Row(
@@ -67,9 +70,12 @@ class TodoItemsListComponent extends StatelessWidget {
                                           children: [
                                             Text(
                                               item.text,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w500),
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: CustomColor.black,
+                                              ),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.only(top: 5),
@@ -78,7 +84,7 @@ class TodoItemsListComponent extends StatelessWidget {
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Icon(Icons.alarm,
-                                                      color: Colors.black38,
+                                                      color: CustomColor.black30,
                                                       size: 16),
                                                   SizedBox(width: 4),
                                                   Text(
@@ -88,7 +94,7 @@ class TodoItemsListComponent extends StatelessWidget {
                                                         fontSize: 14,
                                                         fontWeight:
                                                             FontWeight.w500,
-                                                        color: Colors.black38),
+                                                        color: CustomColor.black30),
                                                   ),
                                                 ],
                                               ),

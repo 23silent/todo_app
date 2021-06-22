@@ -160,7 +160,7 @@ class _EditScreenState extends State<EditScreen> {
                     IconButton(
                       icon: Icon(
                         Icons.calendar_today,
-                        color: Colors.blueAccent,
+                        color: CustomColor.blue,
                       ),
                       onPressed: () {
                         showDatePicker(
@@ -178,6 +178,7 @@ class _EditScreenState extends State<EditScreen> {
                                 0,
                                 0,
                               );
+                              isNotificationScheduled = false;
                             });
                           }
                         });
@@ -186,7 +187,7 @@ class _EditScreenState extends State<EditScreen> {
                     IconButton(
                       icon: Icon(
                         Icons.alarm,
-                        color: Colors.blueAccent,
+                        color: CustomColor.blue,
                       ),
                       onPressed: () {
                         showTimePicker(

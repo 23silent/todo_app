@@ -38,7 +38,7 @@ class TagButton extends StatelessWidget {
                       )),
                   Text(maybePluralize(count, 'task'),
                       style: TextStyle(
-                        color: Colors.black26,
+                        color: CustomColor.black50,
                         fontSize: 14,
                       )),
                 ],
